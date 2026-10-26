@@ -1,8 +1,8 @@
-/* Voix Si Voix la — feuille de style commune à toutes les pages */
+/* Voix Si Voix La — feuille de style commune à toutes les pages */
 
 :root {
-  --couleur-principale: #7a1f4b;   /* bordeaux */
-  --couleur-accent: #e8a33d;       /* or */
+  --couleur-principale: #8d195a;   /* prune du logo */
+  --couleur-secondaire: #032241;   /* bleu nuit du logo */
   --fond: #fdfaf6;
   --fond-carte: #ffffff;
   --texte: #2b2b2b;
@@ -27,6 +27,8 @@ h1, h2, h3 {
   color: var(--couleur-principale);
   line-height: 1.2;
 }
+
+h2 { color: var(--couleur-secondaire); }
 
 a { color: var(--couleur-principale); }
 
@@ -58,6 +60,13 @@ header .conteneur {
   font-weight: 700;
   color: #fff;
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+.logo img {
+  border-radius: 50%;
+  background: #fff;
 }
 nav ul {
   list-style: none;
@@ -74,31 +83,38 @@ nav a {
   border-bottom: 2px solid transparent;
 }
 nav a:hover, nav a[aria-current="page"] {
-  border-bottom-color: var(--couleur-accent);
+  border-bottom-color: #fff;
 }
 
 main { padding: 2rem 0 3rem; }
 
 /* Bandeau d'accueil */
 .bandeau {
-  background: linear-gradient(135deg, var(--couleur-principale), #3d0f26);
+  background: linear-gradient(135deg, var(--couleur-principale), var(--couleur-secondaire));
   color: #fff;
   text-align: center;
   padding: 4rem 1rem;
 }
 .bandeau h1 { color: #fff; font-size: 2.6rem; margin: 0 0 .5rem; }
 .bandeau p { font-size: 1.3rem; margin: 0 0 1.5rem; }
+.logo-bandeau {
+  display: block;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  box-shadow: 0 4px 20px rgba(0,0,0,.3);
+}
 
 .bouton {
   display: inline-block;
-  background: var(--couleur-accent);
-  color: #2b2b2b;
+  background: var(--couleur-principale);
+  color: #fff;
   font-weight: 700;
   text-decoration: none;
   padding: .7rem 1.5rem;
   border-radius: 999px;
 }
-.bouton:hover { filter: brightness(1.08); }
+.bouton:hover { filter: brightness(1.15); }
+.bandeau .bouton { background: #fff; color: var(--couleur-principale); }
 
 /* Cartes (concerts, infos) */
 .cartes {
@@ -141,7 +157,7 @@ main { padding: 2rem 0 3rem; }
 }
 
 footer {
-  background: #2b2b2b;
+  background: var(--couleur-secondaire);
   color: #ddd;
   font-size: .95rem;
   padding: 1.5rem 0;
