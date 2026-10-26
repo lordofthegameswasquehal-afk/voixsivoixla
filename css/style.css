@@ -394,6 +394,7 @@ footer a { color: var(--jaune); }
 
 /* Lecteur YouTube et miniatures cliquables (page Écouter et voir) */
 .video {
+  max-width: 720px;
   border: 3px solid var(--couleur-secondaire);
   border-radius: 18px;
   overflow: hidden;
