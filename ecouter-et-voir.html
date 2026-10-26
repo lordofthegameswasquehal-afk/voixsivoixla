@@ -39,12 +39,19 @@
 
       <section>
         <h2>Vidéos</h2>
-        <p>Retrouvez nos vidéos sur <a href="https://www.youtube.com/@voixsivoixla6986">notre chaîne YouTube</a>.</p>
-        <!-- Pour ajouter une vidéo YouTube, décommenter et remplacer IDENTIFIANT par le code de la vidéo :
+        <p>Toutes les vidéos de <a href="https://www.youtube.com/@voixsivoixla6986">notre chaîne YouTube</a>, à regarder ici. Utilisez le bouton de liste en haut à droite du lecteur pour choisir une vidéo.</p>
+        <!-- Ce lecteur affiche automatiquement toutes les vidéos de la chaîne, y compris les nouvelles. -->
         <div class="video">
-          <iframe src="https://www.youtube-nocookie.com/embed/IDENTIFIANT" title="Concert de la chorale" allowfullscreen loading="lazy"></iframe>
+          <iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=UUCApd7PBSuEY8IVcW0NrH_A" title="Vidéos de la chaîne YouTube Voix Si Voix La" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
         </div>
+
+        <!-- Vidéos à la une : une miniature qui se lance sur place quand on clique dessus.
+             Pour en ajouter une, copier un bloc <button> et remplacer IDENTIFIANT par le code de la vidéo
+             (les 11 caractères après « watch?v= » ou « youtu.be/ » dans le lien YouTube) :
+          <button class="video-mini" type="button" data-id="IDENTIFIANT">Titre de la vidéo</button>
         -->
+        <div class="videos">
+        </div>
       </section>
 
       <section>
@@ -116,5 +123,6 @@
       <p><a href="contact.html">Contact</a> · <a href="mentions-legales.html">Mentions légales</a></p>
     </div>
   </footer>
+  <script src="js/videos.js" defer></script>
 </body>
 </html>
