@@ -139,12 +139,20 @@ main { padding: 2rem 0 4rem; }
   min-height: min(80vh, 680px);
   display: flex;
   align-items: flex-end;
-  background:
-    linear-gradient(180deg, rgba(3, 34, 65, .15) 0%, rgba(3, 34, 65, .55) 55%, rgba(141, 25, 90, .95) 100%),
-    url("../images/photos-2026/01.jpg") center 30% / cover no-repeat,
-    var(--couleur-secondaire);
+  background: var(--couleur-secondaire);
 }
-.bandeau .conteneur { width: 100%; padding-top: 6rem; padding-bottom: 3rem; }
+/* La photo zoome lentement (effet « Ken Burns »), le dégradé reste par-dessus */
+.bandeau::before, .bandeau::after { content: ""; position: absolute; inset: 0; }
+.bandeau::before {
+  background: url("../images/photos-2026/01.jpg") center 30% / cover no-repeat;
+  animation: zoom 24s ease-in-out infinite alternate;
+}
+.bandeau::after {
+  background: linear-gradient(180deg, rgba(3, 34, 65, .15) 0%, rgba(3, 34, 65, .55) 55%, rgba(141, 25, 90, .95) 100%);
+}
+.bandeau > .conteneur { position: relative; z-index: 1; }
+@keyframes zoom { from { transform: scale(1); } to { transform: scale(1.12) translateY(-2%); } }
+.bandeau > .conteneur { width: 100%; padding-top: 6rem; padding-bottom: 3rem; }
 .bandeau h1 {
   color: #fff;
   font-size: clamp(1.9rem, 8.5vw, 6rem);
@@ -173,6 +181,7 @@ main { padding: 2rem 0 4rem; }
   font-weight: 800;
   line-height: 1;
   transform: rotate(12deg);
+  z-index: 2;
   animation: balance 4s ease-in-out infinite;
 }
 .pastille strong { display: block; font-size: 2.6rem; }
@@ -449,4 +458,229 @@ footer a { color: var(--jaune); }
   color: #fff;
   font-weight: 700;
   text-align: left;
+}
+
+/* ===================== Effets et animations ===================== */
+
+/* Arrivée du titre, du texte et des boutons de l'accueil */
+.bandeau h1, .bandeau > .conteneur > p, .bandeau .boutons {
+  animation: monte .9s cubic-bezier(.2, .8, .2, 1) both;
+}
+.bandeau > .conteneur > p { animation-delay: .15s; }
+.bandeau .boutons { animation-delay: .3s; }
+@keyframes monte { from { opacity: 0; transform: translateY(40px); } }
+
+/* Notes de musique qui s'envolent */
+.bandeau .note {
+  position: absolute;
+  bottom: -2rem;
+  z-index: 1;
+  color: var(--jaune);
+  opacity: 0;
+  pointer-events: none;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, .3);
+  animation: envol 10s linear infinite;
+}
+.bandeau .note:nth-of-type(3n) { color: var(--rose); }
+.bandeau .note:nth-of-type(3n+1) { color: #fff; }
+@keyframes envol {
+  0% { transform: translate(0, 0) rotate(0); opacity: 0; }
+  10% { opacity: .9; }
+  50% { transform: translate(30px, -45vh) rotate(15deg); }
+  85% { opacity: .7; }
+  100% { transform: translate(-20px, -90vh) rotate(-10deg); opacity: 0; }
+}
+
+/* Apparition des blocs au défilement (seulement si le JavaScript tourne) */
+.js .apparait {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity .7s ease, transform .7s cubic-bezier(.2, .8, .2, 1);
+}
+.js .apparait.visible { opacity: 1; transform: none; }
+/* Les sous-titres : le surlignage jaune se dessine */
+.js main h2.apparait {
+  transform: none;
+  background-size: 0 100%;
+  background-repeat: no-repeat;
+  transition: opacity .5s ease, background-size .8s .2s ease;
+}
+.js main h2.apparait.visible { background-size: 100% 100%; }
+/* Le trait sous le titre de page s'allonge */
+.js main h1.apparait::after { width: 0; transition: width .8s .3s cubic-bezier(.2, .8, .2, 1); }
+.js main h1.apparait.visible::after { width: 5rem; }
+/* Les affiches gardent leur rotation, l'animation s'applique au cadre */
+.js .galerie figure.apparait { transform: translateY(30px) scale(.96); }
+.js .galerie figure.apparait.visible { transform: none; }
+
+/* Reflet lumineux qui traverse les boutons au survol */
+.bouton { position: relative; overflow: hidden; }
+.bouton::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, .55), transparent);
+  transform: skewX(-20deg);
+  transition: left .6s;
+}
+.bouton:hover::after { left: 130%; }
+
+/* Les cartes s'illuminent légèrement au survol */
+.carte:hover { box-shadow: 9px 9px 0 var(--couleur-secondaire); }
+.carte.a-la-une {
+  background: linear-gradient(135deg, var(--couleur-principale), var(--couleur-secondaire), var(--couleur-principale));
+  background-size: 200% 200%;
+  animation: degrade 10s ease infinite;
+}
+@keyframes degrade { 50% { background-position: 100% 50%; } }
+
+/* Compte à rebours sur la carte du prochain spectacle */
+.compte-a-rebours {
+  float: right;
+  margin: 0 0 1rem 1rem;
+  background: var(--rose);
+  color: #fff;
+  font-family: var(--titres);
+  font-weight: 800;
+  font-size: 1.2rem;
+  padding: .4rem 1rem;
+  border: 3px solid var(--couleur-secondaire);
+  border-radius: 999px;
+  box-shadow: 4px 4px 0 var(--couleur-secondaire);
+  transform: rotate(4deg);
+  animation: pulse 2.4s ease-in-out infinite;
+}
+.compte-a-rebours strong { font-size: 1.6rem; }
+@keyframes pulse { 50% { transform: rotate(4deg) scale(1.08); } }
+
+/* Bandeau de chiffres clés (accueil) */
+.chiffres {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin: 2.5rem 0;
+  text-align: center;
+}
+.chiffres > div {
+  background: var(--fond-carte);
+  border: 3px solid var(--couleur-secondaire);
+  border-radius: 20px;
+  box-shadow: var(--ombre);
+  padding: 1rem .5rem;
+}
+.chiffres strong {
+  display: block;
+  font-family: var(--titres);
+  font-weight: 800;
+  font-size: clamp(2.2rem, 6vw, 3.2rem);
+  line-height: 1.1;
+  color: var(--couleur-principale);
+}
+.chiffres > div:nth-child(2) strong { color: var(--rose); }
+.chiffres > div:nth-child(3) strong { color: var(--turquoise); }
+.chiffres > div:nth-child(4) strong { color: var(--couleur-secondaire); }
+.chiffres span { font-weight: 700; color: var(--texte-doux); }
+
+/* En-tête qui prend une ombre quand on descend */
+header { transition: box-shadow .3s; }
+header.ombre { box-shadow: 0 8px 24px rgba(3, 34, 65, .15); }
+
+/* Barre de progression de lecture, tout en haut */
+.barre-progression {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  z-index: 50;
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, var(--jaune), var(--rose), var(--turquoise));
+}
+
+/* Bouton « revenir en haut » */
+.retour-haut {
+  position: fixed;
+  right: 1.2rem;
+  bottom: 1.2rem;
+  z-index: 40;
+  width: 3rem;
+  height: 3rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--jaune);
+  color: var(--couleur-secondaire);
+  border: 3px solid var(--couleur-secondaire);
+  box-shadow: 4px 4px 0 var(--couleur-secondaire);
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-decoration: none;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+  transition: opacity .3s, transform .3s;
+}
+.retour-haut.visible { opacity: 1; pointer-events: auto; transform: none; }
+.retour-haut:hover { background: var(--rose); color: #fff; }
+
+/* Visionneuse plein écran (photos et affiches) */
+.visionneuse {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: 1rem;
+  background: rgba(3, 34, 65, .94);
+  backdrop-filter: blur(6px);
+  animation: fondu .25s ease;
+}
+.visionneuse[hidden] { display: none; }
+.visionneuse figure { margin: 0; max-width: min(1100px, 100%); text-align: center; color: #fff; }
+.visionneuse img {
+  display: block;
+  max-width: 100%;
+  max-height: 80vh;
+  margin: 0 auto;
+  border: 3px solid #fff;
+  border-radius: 14px;
+  box-shadow: 8px 8px 0 var(--rose);
+}
+.visionneuse img.arrivee { animation: zoom-in .35s cubic-bezier(.2, .8, .2, 1); }
+.visionneuse figcaption { margin-top: .8rem; color: #fff; }
+.visionneuse figcaption strong { color: #fff; }
+.visionneuse button {
+  flex: none;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  border: 3px solid var(--couleur-secondaire);
+  background: var(--jaune);
+  color: var(--couleur-secondaire);
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform .15s, background .15s;
+}
+.visionneuse button:hover { transform: scale(1.1); background: var(--rose); color: #fff; }
+.visionneuse .fermer { position: absolute; top: 1rem; right: 1rem; }
+@keyframes fondu { from { opacity: 0; } }
+@keyframes zoom-in { from { opacity: 0; transform: scale(.92); } }
+body.sans-defilement { overflow: hidden; }
+@media (max-width: 600px) {
+  .visionneuse .precedent, .visionneuse .suivant { position: absolute; bottom: 1rem; }
+  .visionneuse .precedent { left: 1rem; }
+  .visionneuse .suivant { right: 1rem; }
+}
+
+/* Rappel : moins d'animations pour les personnes qui le demandent */
+@media (prefers-reduced-motion: reduce) {
+  .js .apparait { opacity: 1 !important; transform: none !important; }
+  .bandeau .note { display: none; }
 }
